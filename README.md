@@ -1,58 +1,40 @@
-# Arbre Généalogique Médical
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
-Application web moderne pour la création et la gestion d'arbres généalogiques médicaux, conçue spécifiquement pour les professionnels de santé.
+## Getting Started
 
-## 🎯 Fonctionnalités
-
-- Interface moderne et épurée inspirée d'Anthropic/Claude
-- Création d'arbres généalogiques avec symboles médicaux standards
-- Visualisation SVG interactive avec D3.js
-- Gestion des données médicales familiales
-- Export/Import des données
-
-## 🛠️ Technologies
-
-- **Frontend** : Next.js 14+, TypeScript, Tailwind CSS
-- **UI Components** : shadcn/ui
-- **Visualisation** : D3.js
-- **State Management** : Zustand
-- **Styling** : Tailwind CSS
-
-## 🚀 Installation
+First, run the development server:
 
 ```bash
-# Installer les dépendances
-npm install
-
-# Lancer le serveur de développement
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## 📝 Structure du Projet
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```
-src/
-├── components/
-│   ├── layout/       # Composants de mise en page
-│   └── ui/          # Composants UI réutilisables
-├── hooks/           # Custom React hooks
-├── lib/            # Utilitaires et configurations
-├── pages/          # Pages Next.js
-└── styles/         # Styles globaux
-```
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-## 🎨 Design
+[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-L'interface est conçue avec une approche minimaliste et professionnelle :
-- Sidebar de configuration (20% de largeur)
-- Canvas central pour la visualisation
-- Navbar flottante avec contrôles
-- Design adaptatif et moderne
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
 
-## 📄 License
+This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-MIT
+## Learn More
 
-## 🤝 Contribution
+To learn more about Next.js, take a look at the following resources:
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
