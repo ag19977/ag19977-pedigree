@@ -123,7 +123,11 @@ export function MainCanvas({ svgRef, layout, zoomToFit }: MainCanvasProps) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+        style={{ 
+          cursor: isDragging ? 'grabbing' : 'grab',
+          background: 'linear-gradient(to right, #cbd5e1 1px, transparent 1px), linear-gradient(to bottom, #cbd5e1 1px, transparent 1px)',
+          backgroundSize: '20px 20px'
+        }}
       >
         <div 
           style={{
@@ -137,8 +141,7 @@ export function MainCanvas({ svgRef, layout, zoomToFit }: MainCanvasProps) {
             style={{
               width: layout?.canvasSize.width || 1200,
               height: layout?.canvasSize.height || 800,
-              background: 'linear-gradient(to right, #cbd5e1 1px, transparent 1px), linear-gradient(to bottom, #cbd5e1 1px, transparent 1px)',
-              backgroundSize: '20px 20px'
+              backgroundColor: 'white'
             }}
           />
         </div>
