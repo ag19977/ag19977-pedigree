@@ -60,12 +60,12 @@ const useGenealogyStore = create<GenealogyStore>()(
   devtools(
     (set, get) => ({
       // ===== État initial =====
-      individuals: SAMPLE_FAMILY.individuals,
-      couples: SAMPLE_FAMILY.couples,
+  individuals: SAMPLE_FAMILY.individuals,
+  couples: SAMPLE_FAMILY.couples,
       selectedIndividualId: null,
       layout: null,
       validation: null,
-      isLoading: false,
+  isLoading: false,
       error: null,
       engine: null,
       renderer: null,
@@ -220,9 +220,9 @@ const useGenealogyStore = create<GenealogyStore>()(
 
       // ===== Utilitaires =====
       getIndividualById: (id: string) => {
-        return get().individuals.find(individual => individual.id === id)
-      },
-
+    return get().individuals.find(individual => individual.id === id)
+  },
+  
       cleanup: () => {
         const { renderer } = get()
         if (renderer) {
@@ -248,4 +248,4 @@ const useGenealogyStore = create<GenealogyStore>()(
   )
 )
 
-export default useGenealogyStore
+export default useGenealogyStore 
