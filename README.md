@@ -1,40 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Arbre Généalogique Médical
 
-## Getting Started
+Application web moderne pour la création et la gestion d'arbres généalogiques médicaux, conçue selon les standards génétiques.
 
-First, run the development server:
+## 🏗️ Architecture Optimisée
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### **Store Zustand Centralisé** 
+- **État global unique** : Toutes les données et actions centralisées
+- **Mise à jour automatique** : Les modifications apparaissent instantanément
+- **Code propre** : Plus de logs de debug, code simplifié
+
+### **Composants Minimalistes**
+- **AppLayout** : Layout principal épuré
+- **Sidebar** : Interface de modification optimisée
+- **MainCanvas** : Affichage fluide de l'arbre
+- **Hook minimal** : `useGenealogyCanvas` ultra-simplifié
+
+## 🚀 Fonctionnalités
+
+### ✅ **Fonctionnalités Opérationnelles**
+- 🎯 **Sélection d'individus** : Clic sur l'arbre pour sélectionner
+- ⚡ **Modification temps réel** : Les changements apparaissent instantanément sur l'arbre
+- 🔄 **Mise à jour automatique** : Plus besoin de cliquer sur "Mettre à jour" !
+- 💾 **Sauvegarde automatique** : Les modifications sont persistées en temps réel
+- 🎨 **Rendu fluide** : Utilise requestAnimationFrame pour des animations fluides
+- 📊 **Symboles génétiques** : Respect des standards médicaux avec mise à jour automatique
+- 📤 **Export SVG** : Téléchargement de l'arbre en format vectoriel
+
+### 🎨 **Interface Utilisateur**
+- Interface moderne avec shadcn/ui
+- Thème sombre/clair adaptatif
+- Interactions fluides (zoom, pan, sélection)
+- Feedback visuel lors des modifications
+
+## 🛠️ Technologies
+
+- **Next.js 15** - Framework React
+- **TypeScript** - Typage statique
+- **Zustand** - Gestion d'état moderne
+- **D3.js** - Rendu des graphiques
+- **Tailwind CSS** - Styling moderne
+- **shadcn/ui** - Composants UI
+
+## 📁 Structure du Projet
+
+```
+src/
+├── stores/
+│   └── genealogy-store.ts      # Store Zustand centralisé
+├── components/
+│   ├── layout/
+│   │   ├── AppLayout.tsx       # Layout principal
+│   │   ├── Sidebar.tsx         # Interface de modification
+│   │   └── MainCanvas.tsx      # Canvas d'affichage
+│   └── ui/                     # Composants UI réutilisables
+├── hooks/
+│   └── useGenealogyCanvas.ts   # Hook simplifié
+├── types/
+│   └── genealogy.ts           # Types TypeScript
+├── utils/
+│   ├── genealogy-engine.ts    # Moteur de calcul
+│   ├── d3-renderer.ts         # Rendu D3.js
+│   └── sample-data.ts         # Données d'exemple
+└── pages/
+    └── index.tsx              # Page principale
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 Développement
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+# Installation
+npm install
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+# Développement
+npm run dev
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+# Build
+npm run build
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Lint
+npm run lint
+```
 
-## Learn More
+## 🎯 Problèmes Résolus
 
-To learn more about Next.js, take a look at the following resources:
+### ✅ **Avant la Refactorisation**
+- ❌ Modifications non sauvegardées
+- ❌ Arbre non mis à jour après modifications  
+- ❌ Perte des données lors du changement de sélection
+- ❌ Architecture complexe et difficile à maintenir
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+### ✅ **Après la Refactorisation**
+- ✅ **Sauvegarde automatique** : Toutes les modifications sont persistées
+- ✅ **Synchronisation temps réel** : L'arbre se met à jour instantanément
+- ✅ **Persistance des données** : Les modifications restent même après changement de sélection
+- ✅ **Architecture propre** : Store centralisé, composants simplifiés
+- ✅ **Code maintenable** : Logique centralisée, séparation des responsabilités
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📚 Usage
 
-## Deploy on Vercel
+1. **Sélection** : Cliquez sur un individu dans l'arbre
+2. **Modification** : Utilisez la sidebar pour modifier les caractéristiques  
+3. **Visualisation** : ⚡ **L'arbre se met à jour automatiquement** pendant que vous tapez !
+4. **Export** : Téléchargez l'arbre en SVG
+5. **Réinitialisation** : Bouton pour revenir aux données d'exemple
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🎯 **Plus Besoin de Cliquer "Mettre à Jour" !**
+- Tapez un nom → **Changement immédiat**
+- Modifiez l'âge → **Mise à jour instantanée**  
+- Changez un statut → **Arbre actualisé en temps réel**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## 🧬 Standards Génétiques
+
+- **Carrés** : Individus masculins
+- **Cercles** : Individus féminins  
+- **Rempli** : Individu affecté par la condition
+- **Vide** : Individu sain
+- **Trait diagonal** : Individu décédé
+- **Flèche** : Cas index (proband)
