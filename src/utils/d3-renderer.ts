@@ -48,15 +48,12 @@ export class D3GenealogyRenderer {
       return
     }
 
-    // Configuration du SVG avec les bonnes dimensions
+    // Configuration du SVG avec les dimensions fixes
     if (this.svg) {
-      const canvasWidth = layout.canvasSize.width
-      const canvasHeight = layout.canvasSize.height
-      
       this.svg
-        .attr('width', canvasWidth)
-        .attr('height', canvasHeight)
-        .attr('viewBox', `0 0 ${canvasWidth} ${canvasHeight}`)
+        .attr('width', layout.canvasSize.width)
+        .attr('height', layout.canvasSize.height)
+        .attr('viewBox', `0 0 ${layout.canvasSize.width} ${layout.canvasSize.height}`)
     }
 
     // Réinitialiser la transformation du groupe principal
@@ -298,42 +295,31 @@ export class D3GenealogyRenderer {
     return serializer.serializeToString(svgNode)
   }
 
-
-
   /**
    * Méthode publique pour zoomer sur l'arbre
    */
   zoomToFit(layout: TreeLayout): void {
     if (!this.svg || !this.mainGroup) return
     
-    const bounds = layout.bounds
+    // Zoom simple qui ajuste l'échelle pour que l'arbre soit visible
     const canvasWidth = layout.canvasSize.width
     const canvasHeight = layout.canvasSize.height
-    
-    // Facteur de zoom pour que l'arbre occupe 90% de l'espace disponible
-    const treeWidth = bounds.maxX - bounds.minX
-    const treeHeight = bounds.maxY - bounds.minY
     
     // Obtenir les dimensions réelles du container SVG
     const svgElement = this.svg.node()
     const containerWidth = svgElement?.clientWidth || canvasWidth
     const containerHeight = svgElement?.clientHeight || canvasHeight
     
-    const scaleX = (containerWidth * 0.9) / treeWidth
-    const scaleY = (containerHeight * 0.9) / treeHeight
-    const scale = Math.min(scaleX, scaleY, 1)
+    // Calculer le facteur d'échelle pour ajuster au container
+    const scaleX = containerWidth / canvasWidth
+    const scaleY = containerHeight / canvasHeight
+    const scale = Math.min(scaleX, scaleY)
     
-    // Centre de l'arbre
-    const treeCenterX = canvasWidth / 2
-    const treeCenterY = canvasHeight / 2
-    
-    // Centre du container
-    const containerCenterX = containerWidth / 2
-    const containerCenterY = containerHeight / 2
-    
-    // Translation pour centrer
-    const translateX = containerCenterX - treeCenterX * scale
-    const translateY = containerCenterY - treeCenterY * scale
+    // Centrer le canvas mis à l'échelle dans le container
+    const scaledWidth = canvasWidth * scale
+    const scaledHeight = canvasHeight * scale
+    const translateX = (containerWidth - scaledWidth) / 2
+    const translateY = (containerHeight - scaledHeight) / 2
     
     // Application de la transformation avec animation
     this.mainGroup

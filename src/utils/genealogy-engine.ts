@@ -45,23 +45,28 @@ export class GenealogyEngine {
     // Phase 3: Calcul des limites avant centrage
     const preliminaryBounds = this.calculateCanvasBounds(positionedGenerations)
     
-    // Phase 4: Centrage de l'arbre
-    const centeredGenerations = this.centerTree(positionedGenerations, preliminaryBounds)
+    // Phase 4: Centrage de l'arbre dans un canvas de taille fixe
+    const centeredGenerations = this.centerTreeInFixedCanvas(positionedGenerations, preliminaryBounds)
 
     // Phase 5: Calcul des connexions familiales après centrage
     const connections = this.calculateFamilyConnections(centeredGenerations)
 
-    // Phase 6: Recalcul des limites finales
-    const finalBounds = this.calculateCanvasBounds(centeredGenerations)
+    // Phase 6: Taille de canvas fixe
+    const canvasSize = {
+      width: 1200, // Largeur fixe
+      height: 800  // Hauteur fixe
+    }
 
     return {
       generations: centeredGenerations,
       connections,
-      canvasSize: {
-        width: finalBounds.maxX - finalBounds.minX + this.config.canvas.padding * 2,
-        height: finalBounds.maxY - finalBounds.minY + this.config.canvas.padding * 2
-      },
-      bounds: finalBounds
+      canvasSize,
+      bounds: {
+        minX: 0,
+        maxX: canvasSize.width,
+        minY: 0,
+        maxY: canvasSize.height
+      }
     }
   }
 
@@ -462,22 +467,30 @@ export class GenealogyEngine {
   }
 
   /**
-   * Centrage de l'arbre dans le canvas
+   * Centrage de l'arbre dans un canvas de taille fixe
    */
-  private centerTree(generations: Generation[], bounds: {
+  private centerTreeInFixedCanvas(generations: Generation[], bounds: {
     minX: number; maxX: number; minY: number; maxY: number
   }): Generation[] {
+    // Taille du canvas fixe
+    const canvasWidth = 1200
+    const canvasHeight = 800
+    
     // Dimensions de l'arbre
     const treeWidth = bounds.maxX - bounds.minX
     const treeHeight = bounds.maxY - bounds.minY
     
-    // Dimensions souhaitées du canvas avec padding
-    const canvasWidth = treeWidth + this.config.canvas.padding * 2
-    const canvasHeight = treeHeight + this.config.canvas.padding * 2
+    // Centre du canvas
+    const canvasCenterX = canvasWidth / 2
+    const canvasCenterY = canvasHeight / 2
     
-    // Calcul des offsets pour centrer parfaitement
-    const offsetX = (canvasWidth - treeWidth) / 2 - bounds.minX
-    const offsetY = (canvasHeight - treeHeight) / 2 - bounds.minY
+    // Centre de l'arbre (dans ses coordonnées actuelles)
+    const treeCenterX = bounds.minX + treeWidth / 2
+    const treeCenterY = bounds.minY + treeHeight / 2
+    
+    // Offset pour centrer l'arbre dans le canvas
+    const offsetX = canvasCenterX - treeCenterX
+    const offsetY = canvasCenterY - treeCenterY
 
     // Application de l'offset à tous les éléments
     for (const generation of generations) {
