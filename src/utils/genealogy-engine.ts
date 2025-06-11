@@ -39,23 +39,29 @@ export class GenealogyEngine {
     // Phase 1: Organisation par générations
     const generations = this.organizeByGenerations()
 
-    // Phase 2: Calcul séquentiel des positions
+    // Phase 2: Calcul séquentiel des positions (relatif à l'origine)
     const positionedGenerations = this.calculateSequentialLayout(generations)
 
-    // Phase 3: Calcul des connexions familiales
-    const connections = this.calculateFamilyConnections(positionedGenerations)
+    // Phase 3: Calcul des limites avant centrage
+    const preliminaryBounds = this.calculateCanvasBounds(positionedGenerations)
+    
+    // Phase 4: Centrage de l'arbre
+    const centeredGenerations = this.centerTree(positionedGenerations, preliminaryBounds)
 
-    // Phase 4: Calcul des limites du canvas
-    const bounds = this.calculateCanvasBounds(positionedGenerations)
+    // Phase 5: Calcul des connexions familiales après centrage
+    const connections = this.calculateFamilyConnections(centeredGenerations)
+
+    // Phase 6: Recalcul des limites finales
+    const finalBounds = this.calculateCanvasBounds(centeredGenerations)
 
     return {
-      generations: positionedGenerations,
+      generations: centeredGenerations,
       connections,
       canvasSize: {
-        width: bounds.maxX - bounds.minX + this.config.canvas.padding * 2,
-        height: bounds.maxY - bounds.minY + this.config.canvas.padding * 2
+        width: finalBounds.maxX - finalBounds.minX + this.config.canvas.padding * 2,
+        height: finalBounds.maxY - finalBounds.minY + this.config.canvas.padding * 2
       },
-      bounds
+      bounds: finalBounds
     }
   }
 
@@ -137,7 +143,7 @@ export class GenealogyEngine {
    * Phase 2: Calcul séquentiel des positions
    */
   private calculateSequentialLayout(generations: Generation[]): Generation[] {
-    let currentY = this.config.canvas.padding
+    let currentY = 0 // Commencer à 0 au lieu du padding
 
     for (const generation of generations) {
       // Position Y fixe pour toute la génération
@@ -160,7 +166,7 @@ export class GenealogyEngine {
    * Positionnement des individus dans une génération
    */
   private positionIndividualsInGeneration(generation: Generation): void {
-    let currentX = this.config.canvas.padding
+    let currentX = 0 // Commencer à 0 au lieu du padding
 
     // Traitement des couples d'abord
     for (const couple of generation.couples) {
@@ -241,7 +247,7 @@ export class GenealogyEngine {
     for (const individual of generation.individuals) {
       maxX = Math.max(maxX, individual.layout.position.x + this.config.symbols.size)
     }
-    return maxX + this.config.canvas.padding
+    return maxX
   }
 
   /**
@@ -453,5 +459,58 @@ export class GenealogyEngine {
       fill: individual.medicalStatus.healthStatus === 'affected' ? 'filled' : 'empty',
       status: individual.medicalStatus.lifeStatus
     }
+  }
+
+  /**
+   * Centrage de l'arbre dans le canvas
+   */
+  private centerTree(generations: Generation[], bounds: {
+    minX: number; maxX: number; minY: number; maxY: number
+  }): Generation[] {
+    // Dimensions de l'arbre
+    const treeWidth = bounds.maxX - bounds.minX
+    const treeHeight = bounds.maxY - bounds.minY
+    
+    // Dimensions souhaitées du canvas avec padding
+    const canvasWidth = treeWidth + this.config.canvas.padding * 2
+    const canvasHeight = treeHeight + this.config.canvas.padding * 2
+    
+    // Calcul des offsets pour centrer parfaitement
+    const offsetX = (canvasWidth - treeWidth) / 2 - bounds.minX
+    const offsetY = (canvasHeight - treeHeight) / 2 - bounds.minY
+
+    // Application de l'offset à tous les éléments
+    for (const generation of generations) {
+      // Mise à jour position Y de la génération
+      generation.layout.yPosition += offsetY
+      
+      // Mise à jour positions des individus
+      for (const individual of generation.individuals) {
+        individual.layout.position.x += offsetX
+        individual.layout.position.y += offsetY
+      }
+      
+      // Mise à jour positions des couples
+      for (const couple of generation.couples) {
+        if (couple.layout.centerPosition) {
+          couple.layout.centerPosition.x += offsetX
+          couple.layout.centerPosition.y += offsetY
+        }
+        
+        if (couple.layout.connectionLine) {
+          couple.layout.connectionLine.start.x += offsetX
+          couple.layout.connectionLine.start.y += offsetY
+          couple.layout.connectionLine.end.x += offsetX
+          couple.layout.connectionLine.end.y += offsetY
+        }
+        
+        if (couple.layout.childrenConnection?.dropPoint) {
+          couple.layout.childrenConnection.dropPoint.x += offsetX
+          couple.layout.childrenConnection.dropPoint.y += offsetY
+        }
+      }
+    }
+
+    return generations
   }
 } 

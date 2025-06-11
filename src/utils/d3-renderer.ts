@@ -29,6 +29,11 @@ export class D3GenealogyRenderer {
     // Nettoyage du SVG existant
     this.svg.selectAll('*').remove()
     
+    // Configuration du SVG pour un rendu centré
+    this.svg
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .style('background-color', '#f8f9fa')
+    
     // Création du groupe principal
     this.mainGroup = this.svg.append('g')
       .attr('class', 'genealogy-tree')
@@ -43,12 +48,19 @@ export class D3GenealogyRenderer {
       return
     }
 
-    // Mise à jour de la taille du SVG
+    // Configuration du SVG avec les bonnes dimensions
     if (this.svg) {
+      const canvasWidth = layout.canvasSize.width
+      const canvasHeight = layout.canvasSize.height
+      
       this.svg
-        .attr('width', layout.canvasSize.width)
-        .attr('height', layout.canvasSize.height)
+        .attr('width', canvasWidth)
+        .attr('height', canvasHeight)
+        .attr('viewBox', `0 0 ${canvasWidth} ${canvasHeight}`)
     }
+
+    // Réinitialiser la transformation du groupe principal
+    this.mainGroup.attr('transform', null)
 
     // Rendu des connexions familiales
     this.renderFamilyConnections(layout.connections)
@@ -286,28 +298,47 @@ export class D3GenealogyRenderer {
     return serializer.serializeToString(svgNode)
   }
 
+
+
   /**
-   * Zoom sur une région spécifique
+   * Méthode publique pour zoomer sur l'arbre
    */
-  zoomToRegion(
-    bounds: { minX: number; maxX: number; minY: number; maxY: number },
-    padding: number = 50
-  ): void {
+  zoomToFit(layout: TreeLayout): void {
     if (!this.svg || !this.mainGroup) return
-
-    const width = bounds.maxX - bounds.minX + padding * 2
-    const height = bounds.maxY - bounds.minY + padding * 2
     
-    const svgWidth = parseInt(this.svg.attr('width'))
-    const svgHeight = parseInt(this.svg.attr('height'))
+    const bounds = layout.bounds
+    const canvasWidth = layout.canvasSize.width
+    const canvasHeight = layout.canvasSize.height
     
-    const scale = Math.min(svgWidth / width, svgHeight / height)
-    const translateX = (svgWidth - width * scale) / 2 - bounds.minX * scale + padding * scale
-    const translateY = (svgHeight - height * scale) / 2 - bounds.minY * scale + padding * scale
-
+    // Facteur de zoom pour que l'arbre occupe 90% de l'espace disponible
+    const treeWidth = bounds.maxX - bounds.minX
+    const treeHeight = bounds.maxY - bounds.minY
+    
+    // Obtenir les dimensions réelles du container SVG
+    const svgElement = this.svg.node()
+    const containerWidth = svgElement?.clientWidth || canvasWidth
+    const containerHeight = svgElement?.clientHeight || canvasHeight
+    
+    const scaleX = (containerWidth * 0.9) / treeWidth
+    const scaleY = (containerHeight * 0.9) / treeHeight
+    const scale = Math.min(scaleX, scaleY, 1)
+    
+    // Centre de l'arbre
+    const treeCenterX = canvasWidth / 2
+    const treeCenterY = canvasHeight / 2
+    
+    // Centre du container
+    const containerCenterX = containerWidth / 2
+    const containerCenterY = containerHeight / 2
+    
+    // Translation pour centrer
+    const translateX = containerCenterX - treeCenterX * scale
+    const translateY = containerCenterY - treeCenterY * scale
+    
+    // Application de la transformation avec animation
     this.mainGroup
       .transition()
-      .duration(750)
+      .duration(500)
       .attr('transform', `translate(${translateX}, ${translateY}) scale(${scale})`)
   }
 } 

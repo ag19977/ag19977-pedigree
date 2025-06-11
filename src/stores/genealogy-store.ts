@@ -205,7 +205,7 @@ const useGenealogyStore = create<GenealogyStore>()(
       zoomToFit: () => {
         const { renderer, layout } = get()
         if (renderer && layout) {
-          renderer.zoomToRegion(layout.bounds, 20)
+          renderer.zoomToFit(layout)
         }
       },
 
