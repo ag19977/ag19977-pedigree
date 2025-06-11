@@ -63,16 +63,17 @@ export function AppSidebar({
   }, [selectedIndividual, updateIndividualMedicalStatus])
 
   return (
-    <div className="w-1/5 min-w-[280px] max-w-[320px] h-screen flex flex-col border-r border-border/30 bg-background/50">
+    <div className="w-full sm:w-1/4 lg:w-1/5 min-w-[260px] max-w-[350px] h-screen flex flex-col border-r border-border/30 bg-background/50">
       {/* Header */}
-      <div className="p-6 border-b border-border/30">
+      <div className="p-4 lg:p-6 border-b border-border/30">
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <Trees className="h-5 w-5" />
-            Arbre Généalogique
+          <h2 className="text-base lg:text-lg font-semibold text-foreground flex items-center gap-2">
+            <Trees className="h-4 w-4 lg:h-5 lg:w-5" />
+            <span className="hidden sm:inline">Arbre Généalogique</span>
+            <span className="sm:hidden">Arbre</span>
             {isLoading && <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded">Mise à jour...</span>}
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs lg:text-sm text-muted-foreground hidden sm:block">
             Consultation génétique médicale
           </p>
           {error && (
@@ -88,7 +89,7 @@ export function AppSidebar({
         <Accordion 
           type="multiple" 
           defaultValue={["individual"]}
-          className="px-4"
+          className="px-2 lg:px-4"
         >
           {/* Section Individu */}
           <AccordionItem value="individual" className="border-b border-border/30">

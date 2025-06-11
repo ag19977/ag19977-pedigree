@@ -51,10 +51,10 @@ export class GenealogyEngine {
     // Phase 5: Calcul des connexions familiales après centrage
     const connections = this.calculateFamilyConnections(centeredGenerations)
 
-    // Phase 6: Taille de canvas fixe
+    // Phase 6: Taille de canvas adaptative
     const canvasSize = {
-      width: 1200, // Largeur fixe
-      height: 800  // Hauteur fixe
+      width: typeof window !== 'undefined' && window.innerWidth < 768 ? 800 : 1200,
+      height: typeof window !== 'undefined' && window.innerHeight < 600 ? 600 : 800
     }
 
     return {
@@ -472,9 +472,9 @@ export class GenealogyEngine {
   private centerTreeInFixedCanvas(generations: Generation[], bounds: {
     minX: number; maxX: number; minY: number; maxY: number
   }): Generation[] {
-    // Taille du canvas fixe
-    const canvasWidth = 1200
-    const canvasHeight = 800
+    // Taille du canvas adaptative
+    const canvasWidth = typeof window !== 'undefined' && window.innerWidth < 768 ? 800 : 1200
+    const canvasHeight = typeof window !== 'undefined' && window.innerHeight < 600 ? 600 : 800
     
     // Dimensions de l'arbre
     const treeWidth = bounds.maxX - bounds.minX
