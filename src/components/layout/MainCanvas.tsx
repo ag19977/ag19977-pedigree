@@ -141,7 +141,7 @@ export function MainCanvas({ svgRef, layout, zoomToFit }: MainCanvasProps) {
             style={{
               width: layout?.canvasSize.width || 1200,
               height: layout?.canvasSize.height || 800,
-              backgroundColor: 'white'
+              backgroundColor: 'transparent'
             }}
           />
         </div>
